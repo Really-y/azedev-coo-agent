@@ -1,17 +1,17 @@
-# Üzv 1
+# Member 1
 
-- Vəzifə: Backend Developer
+- Role: Backend Developer
 - WhatsApp: +994 XX XXX XX XX
-- Komanda: SaaS (lead: Lead A)
+- Team: SaaS (lead: Lead A)
 
-## Açıq tasklar (canlı, team_stats.py)
-- <task adı> — <lövhə>, deadline YYYY-MM-DD, <prioritet>
+## Open tasks (live, team_stats.py)
+- <task title> — <board>, deadline YYYY-MM-DD, <priority>
 
-## Gecikmə tarixçəsi
-- YYYY-MM-DD HH:MM: N task, M gün gecikmə (1-ci pillə) — sorğu göndərildi.
+## Delay history
+- YYYY-MM-DD HH:MM: N tasks, M days late (step 1) — request sent.
 
-## Öhdəliklər
-- YYYY-MM-DD: <verdiyi tarixli öhdəlik>
+## Commitments
+- YYYY-MM-DD: <dated commitment they gave>
 
-## Statistika (team_stats.py)
-- Açıq N, gecikmiş N, son 30 gündə bitən N, vaxtında N%.
+## Stats (team_stats.py)
+- Open N, overdue N, done in the last 30 days N, on time N%.

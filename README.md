@@ -1,7 +1,5 @@
 # Azedev COO Agent — "Cənab Azedev"
 
-[Azərbaycan dilində](README.az.md)
-
 Infrastructure for an AI agent that serves as Azedev's Chief Operating Officer. It runs on
 [Hermes Agent](https://github.com/NousResearch/hermes-agent) and does four things:
 
@@ -12,7 +10,8 @@ Infrastructure for an AI agent that serves as Azedev's Chief Operating Officer. 
 
 This repo holds the setup only: persona, skill, cron jobs, scripts, the memory layer and example
 configuration. Secrets, the team roster, phone numbers, reports and the memory database are not
-included (see `.gitignore`). The agent works in Azerbaijani, so the persona, skill and prompts are in Azerbaijani.
+included (see `.gitignore`). Everything here is in English, but the agent talks to the team and the CEO
+in Azerbaijani: the persona and prompts tell it to, and the memory examples use Azerbaijani facts.
 
 > Author: Yusif Əzizov, founder and CEO of Azedev — [azedev.com](https://azedev.com)
 

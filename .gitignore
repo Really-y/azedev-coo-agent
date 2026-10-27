@@ -1,4 +1,4 @@
-# Sirlər və canlı məlumat heç vaxt bu repo-ya düşmür
+# Secrets and live data never go into this repo
 .env
 auth.json
 *.db

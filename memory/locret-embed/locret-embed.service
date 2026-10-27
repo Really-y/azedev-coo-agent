@@ -1,5 +1,5 @@
 [Unit]
-Description=LocRet-small lokal embedding servisi (Hermes holographic yaddaşı üçün)
+Description=LocRet-small local embedding service (for Hermes holographic memory)
 Before=hermes-gateway.service
 
 [Service]

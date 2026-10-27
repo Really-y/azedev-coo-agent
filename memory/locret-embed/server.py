@@ -1,7 +1,7 @@
-"""Lokal OpenAI-uyğun /v1/embeddings servisi (LocRet-small, Azərbaycan dili).
+"""Local OpenAI-compatible /v1/embeddings service (LocRet-small, Azerbaijani).
 
-Holographic fakt və sual üçün eyni endpoint-i çağırır, ona görə hər ikisinə
-simmetrik "query: " prefiksi verilir (e5 ailəsinin simmetrik rejimi).
+Holographic calls the same endpoint for facts and for questions, so both get the
+symmetric "query: " prefix (the e5 family's symmetric mode).
 """
 import json
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer

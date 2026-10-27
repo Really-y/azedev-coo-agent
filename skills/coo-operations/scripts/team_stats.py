@@ -10,12 +10,12 @@ Note: done date = updated_at (approx; later edits shift it).
 """
 import json, sys, collections, datetime as dt, os
 
-PROJ = {  # kanban project_id prefiksi -> qısa ad (öz lövhələrinizlə əvəz edin)
+PROJ = {  # kanban project_id prefix -> short name (replace with your own boards)
     "aaaaaaaa": "game-studio", "bbbbbbbb": "saas", "cccccccc": "marketing"}
-TEAM = {  # lead -> members (team.md ilə eyni adlar; öz komandanızla əvəz edin)
-    "Lead A": ["Lead A", "Üzv 1", "Üzv 2"],
-    "Lead B": ["Lead B", "Üzv 3"],
-    "Lead C": ["Lead C", "Üzv 4"],
+TEAM = {  # lead -> members (same names as team.md; replace with your own team)
+    "Lead A": ["Lead A", "Member 1", "Member 2"],
+    "Lead B": ["Lead B", "Member 3"],
+    "Lead C": ["Lead C", "Member 4"],
 }
 
 def load(p):
@@ -25,7 +25,7 @@ def main():
     o, d = load(sys.argv[1]), load(sys.argv[2])
     today = sys.argv[3] if len(sys.argv) > 3 else str(dt.date.today())
     since = str(dt.date.fromisoformat(today) - dt.timedelta(days=30))
-    nm = lambda t: ((t.get("assignee") or {}).get("full_name") or "TƏYİNATSIZ").strip()
+    nm = lambda t: ((t.get("assignee") or {}).get("full_name") or "UNASSIGNED").strip()
     per = collections.defaultdict(lambda: dict(open=0, overdue=0, nodue=0, weakdesc=0,
                                                done30=0, ontime=0, late=0, overdue_titles=[]))
     for t in o:
@@ -54,7 +54,7 @@ def main():
     for k, v in sorted(per.items(), key=lambda x: -x[1]["open"]):
         r = v["ontime"] / (v["ontime"] + v["late"]) * 100 if v["ontime"] + v["late"] else None
         print(f'{k:22} open={v["open"]} over={v["overdue"]} done30={v["done30"]} '
-              f'vaxtinda={"-" if r is None else f"{r:.0f}%"} nodue={v["nodue"]} zeifdesc={v["weakdesc"]}')
+              f'ontime={"-" if r is None else f"{r:.0f}%"} nodue={v["nodue"]} weakdesc={v["weakdesc"]}')
     for l, v in leads.items(): print("LEAD", l, v)
 
 if __name__ == "__main__":

@@ -1,22 +1,23 @@
-"""Holographic yaddaşına ilkin sabit faktları yükləyir (bir dəfəlik).
+"""Seeds the holographic memory with initial durable facts (run once).
 
-İşə salma (Hermes-in öz Python-u ilə, asılılıqları hermes_bootstrap qoşur):
+Run it with Hermes' own Python (hermes_bootstrap puts its dependencies on sys.path):
     HERMES_HOME=~/.hermes ~/.hermes/tools/python-*/bin/python3 -I memory/seed_facts.example.py
 
-Qayda: hər fakt bir qısa cümlə + şəxs adı (entities) + 3-8 açar söz. Açar sözləri Azərbaycan
-hərfləri ilə yazın (ə, ı, ş, ç, ğ): holographic "ə"-ni "e" kimi qatlamır, ASCII "gecikme" sözü
-sualdakı "gecikmə" ilə uyğun gəlmir. Telefon nömrəsi, maliyyə və CEO-ya aid məxfi qeydlər bura
-yazılmır — yaddaş istənilən söhbətə (WhatsApp daxil) düşə bilər.
+Rule: each fact is one short sentence + the person's name (entities) + 3-8 keywords. Write the
+keywords in Azerbaijani letters (ə, ı, ş, ç, ğ): holographic does not fold "ə" into "e", so the ASCII
+keyword "gecikme" does not match "gecikmə" in a question. Phone numbers, finances and CEO-only notes
+never go here — memory can surface in any chat, WhatsApp included. The facts below are in Azerbaijani
+because the agent works in Azerbaijani.
 """
 import os
 import sys
 
 HOME = os.path.expanduser("~/.hermes")
 sys.path[:0] = [f"{HOME}/hermes-agent", f"{HOME}/plugins"]
-import hermes_bootstrap  # noqa: E402,F401  (Hermes asılılıqlarını sys.path-a əlavə edir)
+import hermes_bootstrap  # noqa: E402,F401  (puts Hermes dependencies on sys.path)
 from holographic import HolographicMemoryProvider  # noqa: E402
 
-FACTS = [  # (mətn, kateqoriya, entities, keywords, valid_from)
+FACTS = [  # (text, category, entities, keywords, valid_from)
     ("Eskalasiya qaydası: üzv, sonra team lead, sonra COO, sonra CEO.", "project",
      [], ["eskalasiya", "gecikmə", "gecikib", "xəbər", "pillə", "kimə"], None),
     ("Lead A B2B Solutions / SaaS istiqamətinin team lead-idir.", "project",

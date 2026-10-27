@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Hermes yaddaşını və iş fayllarını arxivləyib Telegram-da "Agents Backup" qrupuna göndərir (cron no_agent).
+"""Archives Hermes memory and workspace files and sends them to a Telegram backup group (cron no_agent).
 
-Qrupun chat id-si ~/.local/share/hermes-backup/telegram_chat faylındadır. Bot tokeni ~/.hermes/.env-dən
-(TELEGRAM_BOT_TOKEN) oxunur. .env, auth.json, state.db (söhbət tarixçəsi) və digər sirlər arxivə düşmür.
-Boş stdout = uğurlu, mesaj yoxdur; xəta olanda mətn CEO-nun Telegram-ına gedir.
+The group's chat id is in ~/.local/share/hermes-backup/telegram_chat. The bot token is read from
+~/.hermes/.env (TELEGRAM_BOT_TOKEN). .env, auth.json, state.db (chat history) and other secrets never
+go into the archive. Empty stdout = success, no message; on failure the text goes to the CEO's Telegram.
 """
 import datetime, io, json, os, re, sqlite3, tarfile, tempfile, urllib.request, uuid
 
@@ -19,7 +19,7 @@ def env_value(name):
     for line in open(f"{H}/.env", encoding="utf-8"):
         if line.startswith(name + "="):
             return line.split("=", 1)[1].strip().strip('"')
-    raise RuntimeError(f"{name} .env-də yoxdur")
+    raise RuntimeError(f"{name} is not in .env")
 
 
 def skip(info):
@@ -41,14 +41,14 @@ def build_archive(path):
                             SECRET.search(open(p, encoding="utf-8", errors="ignore").read()):
                         leaks.append(os.path.relpath(p, H))
             tar.add(src, arcname=item, filter=skip)
-        # SQLite yaddaşı açıq ola bilər: ardıcıl surət üçün backup API
+        # the SQLite memory may be open: use the backup API for a consistent copy
         with tempfile.NamedTemporaryFile(suffix=".db") as tmp:
             with sqlite3.connect(f"file:{H}/memory_store.db?mode=ro", uri=True) as s, sqlite3.connect(tmp.name) as d:
                 s.backup(d)
                 facts = d.execute("SELECT COUNT(*) FROM facts").fetchone()[0]
             tar.add(tmp.name, arcname="memory_store.db")
     if leaks:
-        raise RuntimeError("sirr kimi görünən mətn tapıldı, yedək göndərilmədi: " + ", ".join(leaks))
+        raise RuntimeError("text that looks like a secret was found, backup not sent: " + ", ".join(leaks))
     return facts
 
 
@@ -76,7 +76,7 @@ def main():
         facts = build_archive(path)
         size_kb = os.path.getsize(path) // 1024
         send_document(env_value("TELEGRAM_BOT_TOKEN"), chat_id, path,
-                      f"🗄 Hermes yedəyi — {now:%d.%m.%Y %H:%M}\nYaddaş: {facts} fakt · {size_kb} KB")
+                      f"🗄 Hermes backup — {now:%d.%m.%Y %H:%M}\nMemory: {facts} facts · {size_kb} KB")
 
 
 try:
@@ -84,7 +84,7 @@ try:
 except Exception as exc:
     msg = str(exc)
     try:
-        msg = msg.replace(env_value("TELEGRAM_BOT_TOKEN"), "***")  # URL xətasında token görünməsin
+        msg = msg.replace(env_value("TELEGRAM_BOT_TOKEN"), "***")  # keep the token out of URL errors
     except Exception:
         pass
-    print(f"⚠️ Hermes Telegram yedəyi alınmadı: {msg}")
+    print(f"⚠️ Hermes Telegram backup failed: {msg}")

@@ -11,10 +11,10 @@ for f in files:
     try:
         txt = open(f, encoding="utf-8", errors="replace").read().strip()[:1200]
     except Exception as e:
-        txt = f"(oxunmadı: {e})"
+        txt = f"(could not read: {e})"
     if txt:
         out.append(txt)
     shutil.move(f, f"{B}/sent/{datetime.datetime.now():%Y%m%d-%H%M%S}-{os.path.basename(f)}")
 if out:
-    print(f"📥 Təsdiq/eskalasiya sorğusu ({len(out)}):\n\n" + "\n\n———\n\n".join(out) +
-          "\n\nCavabı bura yazın — icra edirəm.")
+    print(f"📥 Approval/escalation request ({len(out)}):\n\n" + "\n\n———\n\n".join(out) +
+          "\n\nReply here and I will carry it out.")

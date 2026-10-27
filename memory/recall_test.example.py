@@ -1,9 +1,9 @@
-"""Holographic recall testi: Azərbaycan dilində suallar, gözlənilən faktın prefetch blokunda olub-olmadığı.
+"""Holographic recall test: Azerbaijani questions, and whether the expected fact is in the prefetch block.
 
     HERMES_HOME=~/.hermes ~/.hermes/tools/python-*/bin/python3 -I memory/recall_test.example.py
 
-Öz faktlarınıza uyğun sual + gözlənilən söz cütləri yazın. Açar sözləri seçərkən istifadə etmədiyiniz
-ikinci (holdout) sual dəsti ilə də yoxlayın — yalnız tənzimlədiyiniz suallarla test nəticəni şişirdir.
+Write question + expected-word pairs for your own facts. Also test with a second (held-out) set of
+questions you did not look at while choosing keywords — testing only on tuning questions inflates the score.
 """
 import os
 import sys
@@ -13,7 +13,7 @@ sys.path[:0] = [f"{HOME}/hermes-agent", f"{HOME}/plugins"]
 import hermes_bootstrap  # noqa: E402,F401
 from holographic import HolographicMemoryProvider  # noqa: E402
 
-CASES = [  # (sual, gözlənilən faktda olan söz)
+CASES = [  # (question, a word in the expected fact)
     ("Gecikmə olanda kimə xəbər verim?", "Eskalasiya qaydası"),
     ("SaaS komandasının rəhbəri kimdir?", "Lead A"),
     ("CEO-ya hansı dildə yazım?", "Azərbaycan dilində"),
@@ -27,6 +27,6 @@ try:
         ok = want in p.prefetch(q, session_id=f"t-{hash(q)}")
         hits += ok
         print("✓" if ok else "✗", q)
-    print(f"NƏTİCƏ: {hits}/{len(CASES)}")
+    print(f"RESULT: {hits}/{len(CASES)}")
 finally:
     p.shutdown()
