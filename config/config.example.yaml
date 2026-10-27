@@ -1,0 +1,48 @@
+# ~/.hermes/config.yaml — COO agenti üçün dəyişdirilən hissələr (tam fayl deyil).
+# Qalan açarlar Hermes Agent-in standart dəyərləri ilə qalır. Sirlər yalnız ~/.hermes/.env-də saxlanılır
+# və burada ${env:AD} kimi istinadla çağırılır.
+
+model:
+  default: "<model-adı>"
+  provider: "<provayder>"
+
+plugins:
+  # Holographic yaddaş provayderi. Mənaya görə axtarış lokal LocRet-small servisinə gedir
+  # (memory/locret-embed), məlumat serverdən çıxmır.
+  hermes-memory-store:
+    scope: profile
+    recall_indicator: false
+    embeddings: on
+    embedding_url: http://127.0.0.1:8765/v1
+    embedding_model: LocalDoc/LocRet-small
+    embedding_space: locret-small-query-sym
+
+memory:
+  memory_enabled: true
+  user_profile_enabled: true
+  provider: holographic
+  memory_char_limit: 3000   # MEMORY.md yalnız daimi qaydalar üçündür, faktlar holographic-dədir
+  user_char_limit: 2000
+
+# WhatsApp sessiyalarında terminal və messaging yoxdur: əməkdaş mesajı ilə ixtiyari hədəfə
+# göndəriş və ya əmr icrası riski olmasın. CEO-ya sorğu fayl növbəsi ilə gedir (scripts/ceo_queue_forward.py).
+platform_toolsets:
+  cli: [hermes-cli]
+  telegram: [hermes-telegram]
+  whatsapp: [clarify, connections, file, memory, session_search, skills, todo, vision]
+
+mcp_servers:
+  kanba-cloud:                      # task sistemi (Bordaz / Kanba MCP)
+    url: https://<task-sistemi>/api/mcp
+    headers:
+      Authorization: "Bearer ${env:KANBA_MCP_TOKEN}"
+    tools:
+      exclude:                      # geri qaytarılmayan əməliyyatlar agentə verilmir
+        - delete_task
+        - delete_archived_task
+        - purge_all_archived_tasks
+        - delete_column
+        - delete_daily_report
+        - delete_subtask
+        - add_project_member
+        - archive_completed_tasks

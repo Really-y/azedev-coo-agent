@@ -1,0 +1,15 @@
+# Sirlər və canlı məlumat heç vaxt bu repo-ya düşmür
+.env
+auth.json
+*.db
+*.db-*
+state.db*
+memory_store.db*
+workspace/ceo-notes.md
+workspace/team.md
+workspace/members/*
+!workspace/members/example.md
+workspace/reports/
+workspace/kpi/
+workspace/ceo-queue/
+__pycache__/
